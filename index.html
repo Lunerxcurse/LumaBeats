@@ -1,0 +1,4161 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LumaBeats - A Free Music Platform</title>
+    <link rel="icon" type="image/png" href="/ChatGPT Image May 25, 2025, 11_53_32 PM.png" sizes="192x192">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a0b2e 0%, #16213e 100%);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            color: #00ff88;
+        }
+
+        .section-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            margin-top: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px 30px;
+            overflow-y: auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 12px 20px;
+            width: 300px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: white;
+            outline: none;
+            margin-left: 10px;
+            width: 100%;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-register {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-login {
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* New Releases Section */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .section-title-main {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Album Grid */
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .album-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .album-image {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            transition: filter 0.3s ease;
+            overflow: hidden;
+        }
+
+        .album-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .album-card:hover .album-image img {
+            transform: scale(1.05);
+        }
+
+        .play-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 255, 136, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .album-card:hover .play-button {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .play-button::after {
+            content: '▶';
+            color: white;
+            font-size: 16px;
+            margin-left: 2px;
+        }
+
+        .album-info {
+            padding: 12px;
+            background: rgba(26, 11, 46, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .album-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .album-artist {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Icon styles */
+        .icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+            fill: currentColor;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 220px;
+            width: calc(100% - 220px);
+            height: 100%;
+            background: rgba(23, 19, 32, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .loader {
+            width: 40px;  
+            height: 40px; 
+            border: 5px solid rgba(191, 173, 234, 0.2);
+            border-top: 5px solid #bfadea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 11, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            z-index: 1000;
+            display: none; /* Hidden by default on mobile */
+        }
+
+        @media (min-width: 769px) {
+            .music-player {
+                display: block; /* Always visible on desktop */
+            }
+        }
+
+        .music-player.mobile-active {
+            display: block; /* Show on mobile when explicitly activated */
+        }
+
+        .music-player-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .player-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .player-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 250px;
+            flex-basis: 30%;
+        }
+
+        .player-album-art {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .player-album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .song-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .song-title {
+            font-weight: 600;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .song-artist {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        .mobile-quick-action {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-quick-action {
+                display: flex;
+                background: none;
+                border: none;
+                color: white;
+                align-items: center;
+                justify-content: center;
+                margin-left: 10px;
+            }
+
+            .mobile-quick-action svg {
+                width: 24px;
+                height: 24px;
+                opacity: 0.7;
+            }
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .control-btn:hover {
+            color: #bfadea;
+        }
+
+        .play-pause {
+            background: #bfadea;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #171320;
+        }
+
+        .play-pause:hover {
+            background: #a090d0;
+            color: #171320;
+        }
+
+        .play-pause .play {
+            display: none;
+        }
+
+        .play-pause.is-playing .pause {
+            display: block;
+        }
+
+        .play-pause.is-playing .play {
+            display: none;
+        }
+
+        .play-pause:not(.is-playing) .pause {
+            display: none;
+        }
+
+        .play-pause:not(.is-playing) .play {
+            display: block;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            min-width: 40px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: #bfadea;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .progress-handle {
+            width: 12px;
+            height: 12px;
+            background: #bfadea;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 150px;
+        }
+
+        .volume-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .volume-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .volume-progress {
+            height: 100%;
+            background: #bfadea;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .volume-handle {
+            width: 12px;
+            height: 12px;
+            background: #bfadea;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        /* New Styles */
+        .youtube-embed-container {
+            position: fixed;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1000;
+            width: 320px;
+            height: 180px;
+            bottom: 100px;
+            right: 20px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .youtube-embed-container.background-only {
+            display: none !important;
+        }
+
+        .youtube-embed-container iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .close-embed-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .youtube-embed-container {
+                width: 100%;
+                height: 240px;
+                bottom: 90px;
+                right: 0;
+                border-radius: 0;
+            }
+        }
+
+        /* Mobile Navigation Bar */
+        .mobile-nav {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                width: 100%;
+                padding: 20px 15px;
+            }
+
+            .album-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .album-image {
+                height: 180px;
+            }
+
+            .mobile-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(26, 11, 46, 0.9);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                justify-content: space-around;
+                padding: 10px 0;
+                z-index: 1000;
+            }
+
+            .mobile-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: rgba(255, 255, 255, 0.6);
+                text-decoration: none;
+                font-size: 12px;
+            }
+
+            .mobile-nav-item.active {
+                color: #00ff88;
+            }
+
+            .mobile-nav-item svg {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 5px;
+            }
+
+            .music-player {
+                bottom: 60px;
+                padding: 10px 15px;
+            }
+
+            .music-player .player-top-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .player-center {
+                grid-column: unset;
+                grid-row: unset;
+                width: auto;
+                display: flex;
+            }
+
+            .player-left {
+                min-width: 0;
+                flex: 1;
+                cursor: pointer;
+            }
+            
+            .player-right {
+                display: none;
+            }
+
+            .player-controls {
+                gap: 10px;
+                justify-self: end;
+            }
+
+            .control-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .play-pause {
+                width: 36px;
+                height: 36px;
+            }
+
+            .shuffle, .repeat {
+                display: none;
+            }
+            
+            .progress-container {
+                display: none;
+            }
+
+            .progress-bar {
+                margin: 0;
+            }
+
+            .time {
+                display: none;
+            }
+
+            .mobile-nav {
+                height: 60px;
+                padding: 8px 0;
+            }
+
+            .mobile-nav-item {
+                font-size: 11px;
+            }
+
+            .mobile-nav-item svg {
+                width: 20px;
+                height: 20px;
+                margin-bottom: 3px;
+            }
+
+            .song-title {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        /* Fullscreen Mobile Player */
+        .fullscreen-mobile-player {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0b2e 0%, #16213e 50%, #2a1a3e 100%);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+
+        .fullscreen-mobile-player.active {
+            display: block;
+        }
+
+        .mobile-player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-player-back {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-player-minimize {
+            display: none;
+        }
+
+        .mobile-player-content {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .mobile-video-container {
+            width: 70%;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-video-container iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mobile-song-info {
+            text-align: left;
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .mobile-song-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .mobile-song-artist {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .mobile-song-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .mobile-action-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            padding: 8px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            flex: 1;
+            max-width: 60px;
+        }
+
+        .mobile-action-btn:hover,
+        .mobile-action-btn.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .mobile-action-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .mobile-action-btn span {
+            display: none;
+        }
+
+        .mobile-player-controls {
+            width: 100%;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .mobile-progress-container {
+            margin-bottom: 20px;
+        }
+
+        .mobile-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .mobile-progress {
+            height: 100%;
+            background: #bfadea;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .mobile-progress-handle {
+            width: 18px;
+            height: 18px;
+            background: #bfadea;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            right: -9px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .mobile-time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .mobile-main-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .mobile-control-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-control-btn:hover {
+            color: #bfadea;
+            transform: scale(1.1);
+        }
+
+        .mobile-control-btn svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .mobile-play-pause {
+            background: #bfadea;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #171320;
+        }
+
+        .mobile-play-pause:hover {
+            background: #a090d0;
+            color: #171320;
+        }
+
+        .mobile-play-pause svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .share-modal.active {
+            display: flex;
+        }
+
+        .share-modal-content {
+            background: rgba(26, 11, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .share-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .share-modal-header h3 {
+            color: white;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .close-share-modal {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .share-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .share-link-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-link-container input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .copy-btn {
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .share-text textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Social Link Icon Circles */
+        .social-link-item {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            color: white; /* Default color for text and icons */
+        }
+
+        .social-link-item:hover {
+            color: #bfadea; /* Hover color for text and icons */
+            transform: translateX(5px);
+        }
+
+        .social-icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1); /* Subtle background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s ease; /* Transition for background */
+        }
+
+        .social-link-item:hover .social-icon-circle {
+            background: rgba(191, 173, 234, 0.2); /* Change circle background on hover */
+        }
+
+        .social-icon-circle svg {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8; /* Keep opacity for the icon itself */
+        }
+
+        /* Track List Styles */
+        .track-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .track-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .track-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .track-number {
+            width: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .track-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .track-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+
+        .track-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .track-title-artist {
+            flex: 1;
+        }
+
+        .track-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .track-artist {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.2;
+        }
+
+        .track-duration {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-right: 15px;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .track-action {
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .track-action:hover {
+            color: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        .heart-icon {
+            opacity: 0.6;
+        }
+
+        .track-action:hover .heart-icon {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .track-item {
+                padding: 10px 12px;
+            }
+
+            .track-thumbnail {
+                width: 45px;
+                height: 45px;
+                margin-right: 12px;
+            }
+
+            .track-title {
+                font-size: 14px;
+            }
+
+            .track-artist {
+                font-size: 12px;
+            }
+
+            .track-duration {
+                font-size: 13px;
+                margin-right: 10px;
+            }
+        }
+        
+        .mobile-play-pause .mobile-pause {
+            display: none;
+        }
+        
+        .mobile-play-pause.is-playing .mobile-pause {
+            display: block;
+        }
+
+        .mobile-play-pause.is-playing .mobile-play {
+            display: none;
+        }
+
+        .mobile-play-pause:not(.is-playing) .mobile-pause {
+            display: none;
+        }
+
+        .mobile-play-pause:not(.is-playing) .mobile-play {
+            display: block;
+        }
+        
+        .share-modal {
+            display: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 5000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(26, 11, 46, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #bfadea;
+            font-size: 22px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 30px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .close-modal:hover {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .image-upload {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .image-upload input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 100%;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .upload-placeholder svg {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 10px;
+        }
+
+        .btn-create {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Better create playlist button */
+        .create-playlist-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .create-playlist-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .create-playlist-btn .icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        #playlists-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .playlist-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .playlist-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .playlist-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Fullscreen Mobile Player */
+        .fullscreen-mobile-player {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0b2e 0%, #16213e 50%, #2a1a3e 100%);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+
+        .fullscreen-mobile-player.active {
+            display: block;
+        }
+
+        .mobile-player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-player-back {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-player-minimize {
+            display: none;
+        }
+
+        .mobile-player-content {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .mobile-video-container {
+            width: 70%;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-video-container iframe {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mobile-song-info {
+            text-align: left;
+            margin-bottom: 15px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .mobile-song-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .mobile-song-artist {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .mobile-song-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .mobile-action-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            padding: 8px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            flex: 1;
+            max-width: 60px;
+        }
+
+        .mobile-action-btn:hover,
+        .mobile-action-btn.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .mobile-action-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .mobile-action-btn span {
+            display: none;
+        }
+
+        .mobile-player-controls {
+            width: 100%;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .mobile-progress-container {
+            margin-bottom: 20px;
+        }
+
+        .mobile-progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .mobile-progress {
+            height: 100%;
+            background: #bfadea;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .mobile-progress-handle {
+            width: 18px;
+            height: 18px;
+            background: #bfadea;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            right: -9px;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+
+        .mobile-time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .mobile-main-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .mobile-control-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-control-btn:hover {
+            color: #bfadea;
+            transform: scale(1.1);
+        }
+
+        .mobile-control-btn svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .mobile-play-pause {
+            background: #bfadea;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #171320;
+        }
+
+        .mobile-play-pause:hover {
+            background: #a090d0;
+            color: #171320;
+        }
+
+        .mobile-play-pause svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 4000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .share-modal.active {
+            display: flex;
+        }
+
+        .share-modal-content {
+            background: rgba(26, 11, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .share-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .share-modal-header h3 {
+            color: white;
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .close-share-modal {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .share-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .share-link-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .share-link-container input {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .copy-btn {
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .share-text textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Social Link Icon Circles */
+        .social-link-item {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            color: white; /* Default color for text and icons */
+        }
+
+        .social-link-item:hover {
+            color: #bfadea; /* Hover color for text and icons */
+            transform: translateX(5px);
+        }
+
+        .social-icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1); /* Subtle background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s ease; /* Transition for background */
+        }
+
+        .social-link-item:hover .social-icon-circle {
+            background: rgba(191, 173, 234, 0.2); /* Change circle background on hover */
+        }
+
+        .social-icon-circle svg {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8; /* Keep opacity for the icon itself */
+        }
+
+        /* Track List Styles */
+        .track-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .track-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .track-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .track-number {
+            width: 30px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .track-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .track-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-right: 15px;
+        }
+
+        .track-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .track-title-artist {
+            flex: 1;
+        }
+
+        .track-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .track-artist {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.2;
+        }
+
+        .track-duration {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin-right: 15px;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .track-action {
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .track-action:hover {
+            color: #ff6b6b;
+            transform: scale(1.1);
+        }
+
+        .heart-icon {
+            opacity: 0.6;
+        }
+
+        .track-action:hover .heart-icon {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .track-item {
+                padding: 10px 12px;
+            }
+
+            .track-thumbnail {
+                width: 45px;
+                height: 45px;
+                margin-right: 12px;
+            }
+
+            .track-title {
+                font-size: 14px;
+            }
+
+            .track-artist {
+                font-size: 12px;
+            }
+
+            .track-duration {
+                font-size: 13px;
+                margin-right: 10px;
+            }
+        }
+        
+        .mobile-play-pause .mobile-pause {
+            display: none;
+        }
+        
+        .mobile-play-pause.is-playing .mobile-pause {
+            display: block;
+        }
+
+        .mobile-play-pause.is-playing .mobile-play {
+            display: none;
+        }
+
+        .mobile-play-pause:not(.is-playing) .mobile-pause {
+            display: none;
+        }
+
+        .mobile-play-pause:not(.is-playing) .mobile-play {
+            display: block;
+        }
+        
+        .share-modal {
+            display: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 5000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: rgba(26, 11, 46, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #bfadea;
+            font-size: 22px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 30px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .close-modal:hover {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .image-upload {
+            position: relative;
+            width: 100%;
+            height: 150px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .image-upload input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .image-preview {
+            width: 100%;
+            height: 100%;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .upload-placeholder svg {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 10px;
+        }
+
+        .btn-create {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #00ff88, #00ccff);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Better create playlist button */
+        .create-playlist-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        
+        .create-playlist-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .create-playlist-btn .icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        #playlists-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .playlist-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .playlist-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .playlist-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Fullscreen Mobile Player */
+        .fullscreen-mobile-player {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0b2e 0%, #16213e 50%, #2a1a3e 100%);
+            z-index: 3000;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <img src="/Screenshot_2025-05-24_7.38.35_PM-removebg-preview.png" alt="Luma Beats Logo" style="max-width: 150px; height: auto;">
+            </div>
+            
+            <nav>
+                <div class="nav-section">
+                    <a href="#" class="nav-item active">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <span>Discover</span>
+                    </a>
+                </div>
+
+                <div class="section-title">YOUR MUSIC</div>
+                <div class="nav-section">
+                    <a href="#" class="nav-item">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        <span>Saved Songs</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12,6 12,12 16,14"/>
+                        </svg>
+                        <span>History</span>
+                    </a>
+                </div>
+
+                <div class="section-title">PLAYLISTS</div>
+                <div class="create-playlist">
+                    <button onclick="showCreatePlaylistModal()" class="create-playlist-btn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Create Playlist
+                    </button>
+                </div>
+                <div id="playlists-container">
+                    <!-- Playlists will be added here dynamically -->
+                </div>
+                <div class="section-title" style="margin-top: 30px;">ABOUT</div>
+                <div class="nav-section">
+                    <a href="#" class="nav-item" data-section="About Me">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="16" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        </svg>
+                        <span>About Me</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; opacity: 0.7;">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" placeholder="Search">
+                </div>
+                <div class="auth-buttons">
+                    <div id="logged-out-buttons">
+                        <a href="register.html" class="btn btn-register">Register</a>
+                        <a href="login.html" class="btn btn-login">Login</a>
+                    </div>
+                    <div id="logged-in-buttons" style="display: none;">
+                        <button class="btn btn-account" onclick="toggleAccountMenu()">
+                            <img id="profile-picture" src="/user-default.png" alt="Profile" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;">
+                            <span id="user-name">Account</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Releases Section -->
+            <div class="section-header">
+                <h2 class="section-title-main">New Releases</h2>
+                <a href="#" class="view-all">→</a>
+            </div>
+
+            <div class="album-grid">
+                <!-- Album grid content will be populated by JavaScript -->
+            </div>
+
+            <!-- Popular Tracks Section -->
+            <div class="popular-tracks">
+                <div class="section-header">
+                    <h2 class="section-title-main">Popular Tracks</h2>
+                    <a href="#" class="view-all">→</a>
+                </div>
+                <div class="track-list">
+                    <!-- Track items will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Add new Artists Section -->
+            <div class="popular-artists" style="margin-top: 40px; margin-bottom: 40px;">
+                <div class="section-header">
+                    <h2 class="section-title-main">Popular Artists</h2>
+                    <a href="#" class="view-all">→</a>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px 0;">
+                    <div class="artist-card" style="text-align: center; cursor: pointer;" onclick="window.open('https://www.youtube.com/c/EdSheeran', '_blank')">
+                        <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                            <img src="https://yt3.googleusercontent.com/n5DRh94eycw6xGcOKTn6LKQwztTwaw24fW3qXoCT_qysXM3E20TgwNLJ0J1sUWBib1TwY8-X=s800-c-k-c0x00ffffff-no-rj" 
+                                 alt="Ed Sheeran" 
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        </div>
+                        <div style="font-weight: 600; margin-bottom: 5px;">Ed Sheeran</div>
+                        <div style="color: rgba(255,255,255,0.6); font-size: 14px;">16.2M followers</div>
+                    </div>
+                    <div class="artist-card" style="text-align: center; cursor: pointer;" onclick="window.open('https://www.youtube.com/channel/UCZFWPqqPkFlNwIxcpsLOwew', '_blank')">
+                        <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                            <img src="https://yt3.googleusercontent.com/y_esGAQOhX4rTpWvrALErAJlFbm_2TIVjQWaiXq_KMl6bQkJqBZdqHQZWPkGOBjT-0LcOgTWvA=s800-c-k-c0x00ffffff-no-rj" 
+                                 alt="Billie Eilish" 
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        </div>
+                        <div style="font-weight: 600; margin-bottom: 5px;">Billie Eilish</div>
+                        <div style="color: rgba(255,255,255,0.6); font-size: 14px;">12.8M followers</div>
+                    </div>
+                    <div class="artist-card" style="text-align: center; cursor: pointer;" onclick="window.open('https://www.youtube.com/c/TheWeeknd', '_blank')">
+                        <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                            <img src="https://yt3.googleusercontent.com/QiI-c4cFyRPD6TV8KNMsXQYzqQPQjk8ZlL6gkfsqPVd0DVxNmL5_WYBTZZrqT3JEvJ_bhM5Q=s800-c-k-c0x00ffffff-no-rj" 
+                                 alt="The Weeknd" 
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        </div>
+                        <div style="font-weight: 600; margin-bottom: 5px;">The Weeknd</div>
+                        <div style="color: rgba(255,255,255,0.6); font-size: 14px;">14.5M followers</div>
+                    </div>
+                    <div class="artist-card" style="text-align: center; cursor: pointer;" onclick="window.open('https://www.youtube.com/c/DuaLipa', '_blank')">
+                        <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                            <img src="https://yt3.googleusercontent.com/ytc/AIf8zZTUVa5AyXO8-SFO1PxMmrXkgQmQoJGZrGE8Ee9C=s800-c-k-c0x00ffffff-no-rj" 
+                                 alt="Dua Lipa" 
+                                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        </div>
+                        <div style="font-weight: 600; margin-bottom: 5px;">Dua Lipa</div>
+                        <div style="color: rgba(255,255,255,0.6); font-size: 14px;">11.7M followers</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="loading-overlay">
+            <div class="loader"></div>
+        </div>
+
+        <!-- Music Player -->
+        <div class="music-player">
+            <div class="music-player-inner">
+                <div class="player-top-row">
+                    <div class="player-left">
+                        <div class="player-album-art">
+                            <img src="/Screenshot 2025-05-24 6.36.18 PM.png" alt="Album Art">
+                        </div>
+                        <div class="song-details">
+                            <div class="song-title">No Music Selected</div>
+                            <div class="song-artist"></div>
+                        </div>
+                    </div>
+                    <div class="player-center">
+                        <div class="player-controls">
+                            <button class="control-btn shuffle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
+                                </svg>
+                            </button>
+                            <button class="control-btn previous">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 20L9 12l10-8v16z"/>
+                                    <path d="M5 19V5"/>
+                                </svg>
+                            </button>
+                            <button class="control-btn play-pause">
+                                <svg class="pause" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0">
+                                    <path d="M10 4H6v16h4V4zM18 4h-4v16h4z"/>
+                                </svg>
+                                <svg class="play" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0">
+                                    <path d="M5 4l14 8-14 8V4z"/>
+                                </svg>
+                            </button>
+                            <button class="control-btn next">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 4l10 8-10 8V4z"/>
+                                    <path d="M19 5v14"/>
+                                </svg>
+                            </button>
+                            <button class="control-btn repeat">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 2l4 4-4 4"/>
+                                    <path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
+                                    <path d="M7 22l-4-4 4-4"/>
+                                    <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="progress-container">
+                            <div class="time current">0:00</div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                                <div class="progress-handle"></div>
+                            </div>
+                            <div class="time total">0:00</div>
+                        </div>
+                    </div>
+                    <div class="player-right">
+                        <div class="volume-control">
+                            <button class="volume-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 5L6 9H2v6h4l5 5V5z"/>
+                                    <path d="M15.54 8.46a5.5 5.5 0 0 0 0 7.07"/>
+                                </svg>
+                            </button>
+                            <div class="volume-slider">
+                                <div class="volume-progress" style="width: 100%"></div>
+                                <div class="volume-handle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- New YouTube Embed Section -->
+                <div class="youtube-embed-container">
+                    <iframe 
+                        id="youtube-player" 
+                        width="320" 
+                        height="180" 
+                        src="" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                    ></iframe>
+                    <button class="close-embed-btn">×</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add fullscreen mobile player -->
+    <div id="fullscreen-mobile-player" class="fullscreen-mobile-player">
+        <div class="mobile-player-header">
+            <button class="mobile-player-back" onclick="closeMobileFullscreenPlayer()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="mobile-player-content">
+            <div class="mobile-video-container">
+                <iframe id="mobile-youtube-player" 
+                        width="100%" 
+                        height="100%" 
+                        src="" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+            
+            <div class="mobile-song-info">
+                <div class="mobile-song-title" id="mobile-song-title">No Music Selected</div>
+                <div class="mobile-song-artist" id="mobile-song-artist">Unknown Artist</div>
+            </div>
+            
+            <div class="mobile-song-actions">
+                <button class="mobile-action-btn" id="mobile-like-btn" onclick="toggleMobileLike()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2 1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                    </svg>
+                </button>
+                <button class="mobile-action-btn" id="mobile-dislike-btn" onclick="toggleMobileDislike()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 15v4a3 3 0 0 0 3 3l4-9V5H6.28a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
+                    </svg>
+                </button>
+                <button class="mobile-action-btn" onclick="shareMobileSong()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="18" cy="5" r="3"/>
+                        <circle cx="6" cy="12" r="3"/>
+                        <circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                </button>
+                <button class="mobile-action-btn" onclick="addToPlaylist()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="mobile-player-controls">
+                <div class="mobile-progress-container">
+                    <div class="mobile-progress-bar" onclick="seekMobilePlayer(event)">
+                        <div class="mobile-progress" id="mobile-progress" style="width: 0%"></div>
+                        <div class="mobile-progress-handle"></div>
+                    </div>
+                    <div class="mobile-time-display">
+                        <span id="mobile-current-time">0:00</span>
+                        <span id="mobile-total-time">0:00</span>
+                    </div>
+                </div>
+                
+                <div class="mobile-main-controls">
+                    <button class="mobile-control-btn" onclick="previousMobileSong()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 20L9 12l10-8v16z"/>
+                            <path d="M5 19V5"/>
+                        </svg>
+                    </button>
+                    <button class="mobile-control-btn mobile-play-pause" id="mobile-play-pause-btn" onclick="toggleMobilePlayPause()">
+                        <svg class="mobile-pause" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 4H6v16h4V4zM18 4h-4v16h4z"/>
+                        </svg>
+                        <svg class="mobile-play" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M5 4l14 8-14 8V4z"/>
+                        </svg>
+                    </button>
+                    <button class="mobile-control-btn" onclick="nextMobileSong()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 4l10 8-10 8V4z"/>
+                            <path d="M19 5v14"/>
+                        </svg>
+                    </button>
+                    <button class="mobile-control-btn" id="mobile-loop-btn" onclick="toggleMobileLoop()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 2l4 4-4 4"/>
+                            <path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
+                            <path d="M7 22l-4-4 4-4"/>
+                            <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="share-modal">
+        <div class="share-modal-content">
+            <div class="share-modal-header">
+                <h3>Share Song</h3>
+                <button class="close-share-modal" onclick="closeShareModal()">&times;</button>
+            </div>
+            <div class="share-modal-body">
+                <div class="share-link-container">
+                    <input type="text" id="share-link-input" readonly>
+                    <button class="copy-btn" onclick="copyShareLink()">Copy</button>
+                </div>
+                <div class="share-text">
+                    <textarea id="share-text-area" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account menu -->
+    <div id="account-menu" class="account-menu">
+        <div class="account-menu-header">
+            <h3>Account Settings</h3>
+            <button class="close-menu" onclick="toggleAccountMenu()">&times;</button>
+        </div>
+        <div class="account-menu-content">
+            <div class="profile-section">
+                <div class="profile-picture-container">
+                    <img id="menu-profile-picture" src="/user-default.png" alt="Profile">
+                    <button class="change-picture-btn" onclick="document.getElementById('profile-picture-input').click()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <path d="M21 15v4a2 2 0 0 1-4 4H5a2 2 0 0 1-4-4v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </button>
+                    <input type="file" id="profile-picture-input" accept="image/*" style="display: none;" onchange="handleProfilePictureChange(event)">
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="first-name" placeholder="Enter first name">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="last-name" placeholder="Enter last name">
+                </div>
+                <div class="form-group">
+                    <label>Language</label>
+                    <select id="language">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" id="current-password" placeholder="Enter current password">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="new-password" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="confirm-new-password" placeholder="Confirm new password">
+                </div>
+                <button class="btn btn-save" onclick="saveAccountSettings()">Save Changes</button>
+                <button class="btn btn-delete-account" onclick="confirmDeleteAccount()">Delete Account</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="mobile-nav">
+        <a href="#" class="mobile-nav-item active">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <span>Discover</span>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 11H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4l5 4V7l-5 4z"/>
+                <path d="M22 9l-6 6"/>
+                <path d="M16 9l6 6"/>
+            </svg>
+            <span>New Releases</span>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Saved Songs</span>
+        </a>
+        <a href="#" class="mobile-nav-item">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+            </svg>
+            <span>History</span>
+        </a>
+    </div>
+
+    <script>
+        // YouTube Data API configuration
+        const YOUTUBE_API_KEY = 'AIzaSyDFko_ouqtmkabLfElMHTU_LAjD35EavUY';
+        const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/search';
+
+        // DOM elements for music player
+        const songTitle = document.querySelector('.song-title');
+        const songArtist = document.querySelector('.song-artist');
+        const playerAlbumArt = document.querySelector('.player-album-art img');
+        const currentTimeDisplay = document.querySelector('.time.current');
+        const totalTimeDisplay = document.querySelector('.time.total');
+        const progressBar = document.querySelector('.progress-bar');
+        const progress = document.querySelector('.progress');
+        const progressHandle = document.querySelector('.progress-handle');
+
+        let isVideoPlaying = false;
+        let currentPlayer = null;
+        let isSearchActive = false;
+        let searchTimeout; // Declared globally to be accessible by clearTimeout
+
+        let currentTime = 0;
+        let duration = 0;
+        let progressInterval;
+
+        let currentMobileVideoId = null;
+        let mobileIsLiked = false;
+        let mobileIsDisliked = false;
+        let mobileIsLooped = false;
+        let mobileCurrentTime = 0;
+        let mobileDuration = 0;
+        let mobileProgressInterval;
+
+        function updateProgress() {
+            if (!currentPlayer) return;
+            
+            const iframe = document.getElementById('youtube-player');
+            iframe.contentWindow.postMessage('{"event":"listening"}', '*');
+            
+            // Request current time from YouTube player
+            iframe.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
+            iframe.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
+        }
+
+        // Listen for messages from the YouTube iframe
+        window.addEventListener('message', function(event) {
+            if (event.origin !== "https://www.youtube.com") {
+                return;
+            }
+            if (event.data) {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.event === "infoDelivery" && data.info && typeof data.info.currentTime !== 'undefined') {
+                        currentTime = data.info.currentTime;
+                        if (typeof data.info.duration !== 'undefined') {
+                            duration = data.info.duration;
+                        }
+
+                        if (duration > 0) {
+                            const percentage = (currentTime / duration) * 100;
+                            progress.style.width = `${percentage}%`;
+                            currentTimeDisplay.textContent = formatTime(currentTime);
+                            totalTimeDisplay.textContent = formatTime(duration);
+                        }
+                    } else if (data.event === "infoDelivery" && data.info && typeof data.info.playerState !== 'undefined') {
+                        const playerState = data.info.playerState;
+                        const playPauseBtn = document.querySelector('.play-pause');
+
+                        // 1: playing, 2: paused, 0: ended
+                        if (playerState === 1) {
+                            isVideoPlaying = true;
+                            playPauseBtn.classList.add('is-playing');
+                             if (progressInterval) clearInterval(progressInterval);
+                            progressInterval = setInterval(updateProgress, 1000);
+                        } else {
+                            isVideoPlaying = false;
+                            playPauseBtn.classList.remove('is-playing');
+                            if (progressInterval) clearInterval(progressInterval);
+                        }
+                    } else if (data.event === "onReady") {
+                         // When player is ready, start listening for state changes
+                        event.source.postMessage('{"event":"listening","id":1}', event.origin);
+                    }
+                } catch (e) {
+                    // This can happen if the message is not JSON, which is fine.
+                }
+            }
+        });
+
+        // Listen for mobile YouTube player messages
+        window.addEventListener('message', function(event) {
+            if (event.origin !== "https://www.youtube.com") {
+                return;
+            }
+            if (event.data && currentPlayer === 'mobile') {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.event === "infoDelivery" && data.info && typeof data.info.currentTime !== 'undefined') {
+                        mobileCurrentTime = data.info.currentTime;
+                        if (typeof data.info.duration !== 'undefined') {
+                            mobileDuration = data.info.duration;
+                        }
+
+                        if (mobileDuration > 0) {
+                            const percentage = (mobileCurrentTime / mobileDuration) * 100;
+                            document.getElementById('mobile-progress').style.width = `${percentage}%`;
+                            document.getElementById('mobile-current-time').textContent = formatTime(mobileCurrentTime);
+                            document.getElementById('mobile-total-time').textContent = formatTime(mobileDuration);
+                        }
+                    } else if (data.event === "infoDelivery" && data.info && typeof data.info.playerState !== 'undefined') {
+                        const playerState = data.info.playerState;
+                        const playPauseBtn = document.getElementById('mobile-play-pause-btn');
+
+                        if (playerState === 1) {
+                            isVideoPlaying = true;
+                            playPauseBtn.classList.add('is-playing');
+                        } else {
+                            isVideoPlaying = false;
+                            playPauseBtn.classList.remove('is-playing');
+                        }
+                    }
+                } catch (e) {
+                    // Handle non-JSON messages
+                }
+            }
+        });
+
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds < 0) {
+                return '0:00';
+            }
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Add click handler for progress bar
+        progressBar.addEventListener('click', function(e) {
+            if (!currentPlayer) return;
+            
+            const rect = progressBar.getBoundingClientRect();
+            const clickPosition = (e.clientX - rect.left) / rect.width;
+            const newTime = clickPosition * duration;
+            
+            const iframe = document.getElementById('youtube-player');
+            iframe.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${newTime},true]}`, '*');
+        });
+
+        function updateMobileProgress() {
+            if (!currentPlayer || currentPlayer !== 'mobile') return;
+            
+            const iframe = document.getElementById('mobile-youtube-player');
+            iframe.contentWindow.postMessage('{"event":"listening"}', '*');
+            iframe.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
+            iframe.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
+        }
+
+        function getSongHistory() {
+            const history = localStorage.getItem('songHistory');
+            return history ? JSON.parse(history) : [];
+        }
+
+        function addToHistory(song) {
+            let history = getSongHistory();
+            
+            // Remove duplicates if song already exists
+            history = history.filter(item => item.videoId !== song.videoId);
+            
+            // Add new song to beginning of array
+            history.unshift({
+                videoId: song.videoId,
+                title: song.title,
+                artist: song.artist,
+                thumbnail: song.thumbnail,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Keep only last 50 songs
+            if (history.length > 50) {
+                history = history.slice(0, 50);
+            }
+            
+            localStorage.setItem('songHistory', JSON.stringify(history));
+            
+            // Update history UI if we're on the history page
+            updateHistoryUI();
+        }
+
+        function updateHistoryUI() {
+            const mainContent = document.querySelector('.main-content');
+            const currentPage = document.querySelector('.nav-item.active').textContent.trim();
+            
+            if (currentPage === 'History') {
+                const history = getSongHistory();
+                
+                // Create history content
+                const historyContent = `
+                    <div class="section-header">
+                        <h2 class="section-title-main">Recently Played</h2>
+                    </div>
+                    <div class="album-grid">
+                        ${history.map(song => `
+                            <div class="album-card" onclick="playVideo('${song.videoId}', '${song.title}', '${song.artist}')">
+                                <div class="album-image">
+                                    <img src="${song.thumbnail}" alt="${song.title}">
+                                    <div class="play-button"></div>
+                                </div>
+                                <div class="album-info">
+                                    <div class="album-title">${song.title}</div>
+                                    <div class="album-artist">${song.artist}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                // Clear existing content and add history
+                // Preserve the header
+                const currentHeader = mainContent.querySelector('.header').outerHTML; // Preserve the header HTML
+                
+                // Update main content to show playlist
+                mainContent.innerHTML = currentHeader + historyContent;
+            }
+        }
+
+        function playVideo(videoId, title, artist) {
+            console.log(`Playing: ${title} by ${artist}`);
+            
+            const thumbnail = `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`;
+            
+            // Add to history
+            addToHistory({
+                videoId,
+                title,
+                artist,
+                thumbnail
+            });
+
+            // Check if mobile - if so, open fullscreen player
+            if (window.innerWidth <= 768) {
+                // Hide mobile bar player when opening fullscreen
+                const musicPlayer = document.querySelector('.music-player');
+                musicPlayer.classList.remove('mobile-active');
+                
+                openMobileFullscreenPlayer(videoId, title, artist);
+            } else {
+                // Desktop behavior
+                // Update the music player UI
+                playerAlbumArt.src = thumbnail;
+                songTitle.textContent = title;
+                songArtist.textContent = artist;
+                
+                // Set up the YouTube embed with autoplay enabled and start playing immediately
+                const youtubePlayer = document.getElementById('youtube-player');
+                youtubePlayer.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&controls=0`;
+                document.querySelector('.youtube-embed-container').style.display = 'block';
+                currentPlayer = 'desktop';
+
+                // Update play/pause button state
+                const playPauseBtn = document.querySelector('.play-pause');
+                playPauseBtn.classList.add('is-playing');
+
+                isVideoPlaying = true;
+                
+                // Reset progress tracking
+                currentTime = 0;
+                duration = 0;
+                if (progressInterval) clearInterval(progressInterval);
+                progressInterval = setInterval(updateProgress, 1000);
+            }
+        }
+
+        function openMobileFullscreenPlayer(videoId, title, artist) {
+            currentMobileVideoId = videoId;
+            
+            // Update mobile player info
+            document.getElementById('mobile-song-title').textContent = title;
+            document.getElementById('mobile-song-artist').textContent = artist;
+            
+            // Set up mobile YouTube player
+            const mobileYoutubePlayer = document.getElementById('mobile-youtube-player');
+            mobileYoutubePlayer.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&controls=0`;
+            
+            // Show fullscreen player
+            document.getElementById('fullscreen-mobile-player').classList.add('active');
+            
+            // Update button states
+            document.getElementById('mobile-play-pause-btn').classList.add('is-playing');
+            
+            // Start progress tracking
+            if (mobileProgressInterval) clearInterval(mobileProgressInterval);
+            mobileProgressInterval = setInterval(updateMobileProgress, 1000);
+            
+            currentPlayer = 'mobile';
+            isVideoPlaying = true;
+        }
+
+        function closeMobileFullscreenPlayer() {
+            document.getElementById('fullscreen-mobile-player').classList.remove('active');
+            
+            // Show mobile bar player when closing fullscreen
+            if (window.innerWidth <= 768) {
+                const musicPlayer = document.querySelector('.music-player');
+                musicPlayer.classList.add('mobile-active');
+            }
+            
+            // Don't stop video - switch to background mode
+            const mobileTitle = document.getElementById('mobile-song-title').textContent;
+            const mobileArtist = document.getElementById('mobile-song-artist').textContent;
+            
+            if (currentMobileVideoId && mobileTitle && mobileTitle !== 'No Music Selected') {
+                // Update main player info
+                songTitle.textContent = mobileTitle;
+                songArtist.textContent = mobileArtist;
+                playerAlbumArt.src = `https://i.ytimg.com/vi/${currentMobileVideoId}/mqdefault.jpg`;
+                
+                // Create or update background player iframe (hidden)
+                let backgroundPlayer = document.getElementById('background-audio-player');
+                if (!backgroundPlayer) {
+                    backgroundPlayer = document.createElement('iframe');
+                    backgroundPlayer.id = 'background-audio-player';
+                    backgroundPlayer.style.display = 'none';
+                    backgroundPlayer.style.position = 'absolute';
+                    backgroundPlayer.style.left = '-9999px';
+                    backgroundPlayer.width = '1';
+                    backgroundPlayer.height = '1';
+                    document.body.appendChild(backgroundPlayer);
+                }
+                backgroundPlayer.src = `https://www.youtube.com/embed/${currentMobileVideoId}?enablejsapi=1&autoplay=1&controls=0`;
+                
+                // Switch to background mode
+                currentPlayer = 'background';
+                
+                // Update main player controls
+                const playPauseBtn = document.querySelector('.play-pause');
+                if (isVideoPlaying) {
+                    playPauseBtn.classList.add('is-playing');
+                } else {
+                    playPauseBtn.classList.remove('is-playing');
+                }
+                
+                // Don't show desktop embed - keep it hidden for background audio
+                document.querySelector('.youtube-embed-container').style.display = 'none';
+                
+            } else {
+                // If no video, clear everything
+                const mobileYoutubePlayer = document.getElementById('mobile-youtube-player');
+                mobileYoutubePlayer.src = '';
+                currentPlayer = null;
+                isVideoPlaying = false;
+                currentMobileVideoId = null;
+            }
+            
+            // Stop mobile progress tracking
+            if (mobileProgressInterval) clearInterval(mobileProgressInterval);
+        }
+
+        function minimizeMobilePlayer() {
+            // Close fullscreen player but keep audio playing in background
+            document.getElementById('fullscreen-mobile-player').classList.remove('active');
+            
+            // Update main player info to show what's currently playing
+            const mobileTitle = document.getElementById('mobile-song-title').textContent;
+            const mobileArtist = document.getElementById('mobile-song-artist').textContent;
+            
+            if (mobileTitle && mobileTitle !== 'No Music Selected') {
+                songTitle.textContent = mobileTitle;
+                songArtist.textContent = mobileArtist;
+                
+                // Update main player thumbnail
+                if (currentMobileVideoId) {
+                    playerAlbumArt.src = `https://i.ytimg.com/vi/${currentMobileVideoId}/mqdefault.jpg`;
+                }
+                
+                // Switch to background mode but keep playing
+                currentPlayer = 'background';
+                
+                // Update main player controls
+                const playPauseBtn = document.querySelector('.play-pause');
+                if (isVideoPlaying) {
+                    playPauseBtn.classList.add('is-playing');
+                } else {
+                    playPauseBtn.classList.remove('is-playing');
+                }
+            }
+        }
+
+        function togglePlayPause() {
+            const playPauseBtn = document.querySelector('.play-pause');
+            
+            if (!currentPlayer && !currentMobileVideoId) return;
+
+            // Handle background audio from mobile player
+            if (currentPlayer === 'background' && currentMobileVideoId) {
+                // Control background audio player
+                let backgroundPlayer = document.getElementById('background-audio-player');
+                if (backgroundPlayer) {
+                    if (isVideoPlaying) {
+                        backgroundPlayer.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                    } else {
+                        backgroundPlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                    }
+                    isVideoPlaying = !isVideoPlaying;
+                    playPauseBtn.classList.toggle('is-playing', isVideoPlaying);
+                }
+                return;
+            }
+
+            if (currentPlayer === 'desktop') {
+                const iframe = document.getElementById('youtube-player');
+                if (isVideoPlaying) {
+                    // Pause video
+                    iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                } else {
+                    // Play video
+                    iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                }
+            }
+            // The button state will be updated via the message listener
+        }
+
+        function stopVideo() {
+            if (currentPlayer === 'desktop') {
+                const iframe = document.getElementById('youtube-player');
+                iframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+                iframe.src = '';
+            } else if (currentPlayer === 'mobile') {
+                const iframe = document.getElementById('mobile-youtube-player');
+                iframe.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+                iframe.src = '';
+            } else if (currentPlayer === 'background') {
+                const backgroundPlayer = document.getElementById('background-audio-player');
+                backgroundPlayer.contentWindow.postMessage('{"event":"command","func":"stopVideo","args":""}', '*');
+                backgroundPlayer.src = '';
+            }
+            
+            const playPauseBtn = document.querySelector('.play-pause');
+            playPauseBtn.classList.remove('is-playing');
+            isVideoPlaying = false;
+            currentPlayer = null;
+            
+            // Reset player info
+            songTitle.textContent = 'No Music Selected';
+            songArtist.textContent = '';
+            playerAlbumArt.src = '/Screenshot 2025-05-24 6.36.18 PM.png';
+        }
+
+        function updatePlaylistsUI() {
+            const playlistsContainer = document.getElementById('playlists-container');
+            const playlists = JSON.parse(localStorage.getItem('playlists') || '[]');
+            
+            playlistsContainer.innerHTML = playlists.map(playlist => `
+                <div class="playlist-item-container">
+                    <div class="playlist-item" onclick="openPlaylist(${playlist.id})">
+                        <div class="playlist-thumb">
+                            <img src="${playlist.image}" alt="${playlist.name}">
+                        </div>
+                        <span>${playlist.name}</span>
+                    </div>
+                    <button class="delete-playlist-btn" onclick="confirmDeletePlaylist(${playlist.id}, event)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; color: red;">
+                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function confirmDeletePlaylist(playlistId, event) {
+            event.stopPropagation(); // Prevent opening the playlist
+            
+            // Create a modal for confirmation
+            const modal = document.createElement('div');
+            modal.classList.add('delete-confirm-modal');
+            modal.innerHTML = `
+                <div class="delete-confirm-content">
+                    <h3>Delete Playlist</h3>
+                    <p>Are you sure you want to delete this playlist?</p>
+                    <div class="delete-confirm-buttons">
+                        <button class="btn btn-cancel">Cancel</button>
+                        <button class="btn btn-delete">Delete</button>
+                    </div>
+                </div>
+            `;
+            
+            // Style the modal
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            modal.style.display = 'flex';
+            modal.style.justifyContent = 'center';
+            modal.style.alignItems = 'center';
+            modal.style.zIndex = '2000';
+            
+            const modalContent = modal.querySelector('.delete-confirm-content');
+            modalContent.style.background = 'rgba(26, 11, 46, 0.95)';
+            modalContent.style.padding = '30px';
+            modalContent.style.borderRadius = '15px';
+            modalContent.style.textAlign = 'center';
+            modalContent.style.maxWidth = '400px';
+            modalContent.style.width = '90%';
+            
+            const buttons = modalContent.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.style.padding = '10px 20px';
+                btn.style.margin = '10px';
+                btn.style.borderRadius = '8px';
+                btn.style.cursor = 'pointer';
+            });
+            
+            const cancelBtn = modal.querySelector('.btn-cancel');
+            cancelBtn.style.background = 'transparent';
+            cancelBtn.style.color = 'white';
+            cancelBtn.style.border = '1px solid rgba(255,255,255,0.3)';
+            
+            const deleteBtn = modal.querySelector('.btn-delete');
+            deleteBtn.style.background = 'linear-gradient(45deg, red, darkred)';
+            deleteBtn.style.color = 'white';
+            deleteBtn.style.border = 'none';
+            
+            // Cancel button logic
+            cancelBtn.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            // Delete button logic
+            deleteBtn.addEventListener('click', () => {
+                // Remove playlist from localStorage
+                let playlists = JSON.parse(localStorage.getItem('playlists') || '[]');
+                playlists = playlists.filter(p => p.id !== playlistId);
+                localStorage.setItem('playlists', JSON.stringify(playlists));
+                
+                // Update UI
+                updatePlaylistsUI();
+                
+                // Remove modal
+                document.body.removeChild(modal);
+            });
+            
+            // Add to body
+            document.body.appendChild(modal);
+        }
+
+        function openPlaylist(playlistId) {
+            const playlists = JSON.parse(localStorage.getItem('playlists') || '[]');
+            const playlist = playlists.find(p => p.id === playlistId);
+            
+            if (playlist) {
+                const mainContent = document.querySelector('.main-content');
+                const currentHeader = mainContent.querySelector('.header').outerHTML; // Preserve the header HTML
+                
+                // Update main content to show playlist
+                mainContent.innerHTML = `
+                    ${currentHeader}
+                    <div class="section-header">
+                        <h2 class="section-title-main">${playlist.name}</h2>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 25px;">${playlist.description}</p>
+                    <div class="track-list">
+                        ${playlist.songs.length ? 
+                            playlist.songs.map((song, index) => `
+                                <div class="track-item" onclick="playVideo('${song.videoId}', '${song.title}', '${song.artist}')" >
+                                    <div class="track-number">${index + 1}</div>
+                                    <div class="track-info">
+                                        <div class="track-thumbnail">
+                                            <img src="${song.img}" alt="${song.title}" style="display: block;">
+                                        </div>
+                                        <div class="track-title-artist">
+                                            <div class="track-title">${song.title}</div>
+                                            <div class="track-artist">${song.artist}</div>
+                                        </div>
+                                    </div>
+                                    <div class="track-duration">${song.duration || '0:00'}</div>
+                                    <div class="track-action">
+                                        <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            `).join('') :
+                            '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6);">No songs in this playlist yet</div>'
+                        }
+                    </div>
+                `;
+                // Re-attach search functionality after updating innerHTML
+                const currentSearchInput = mainContent.querySelector('.search-bar input');
+                if (currentSearchInput) {
+                    currentSearchInput.addEventListener('input', (e) => {
+                        clearTimeout(searchTimeout);
+                        if (e.target.value.trim()) {
+                            isSearchActive = true;
+                            searchTimeout = setTimeout(() => {
+                                searchYouTube(e.target.value);
+                            }, 500);
+                        } else {
+                            isSearchActive = false;
+                            // When search input is cleared, return to the current playlist view
+                            openPlaylist(playlistId); // Re-render the current playlist
+                        }
+                    });
+                }
+            }
+        }
+
+        // Add these functions to handle account functionality
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            document.getElementById('logged-out-buttons').style.display = isLoggedIn ? 'none' : 'flex';
+            document.getElementById('logged-in-buttons').style.display = isLoggedIn ? 'flex' : 'none';
+            
+            if (isLoggedIn && userData) {
+                document.getElementById('user-name').textContent = userData.firstName || 'Account';
+                if (userData.profilePicture) {
+                    document.getElementById('profile-picture').src = userData.profilePicture;
+                    document.getElementById('menu-profile-picture').src = userData.profilePicture;
+                }
+            }
+        }
+
+        function toggleAccountMenu() {
+            const menu = document.getElementById('account-menu');
+            menu.classList.toggle('active');
+            // Populate account settings with current data if available
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            document.getElementById('first-name').value = userData.firstName || '';
+            document.getElementById('last-name').value = userData.lastName || '';
+            document.getElementById('language').value = userData.language || 'en';
+        }
+
+        function handleProfilePictureChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const profilePicture = reader.result;
+                    document.getElementById('profile-picture').src = profilePicture;
+                    document.getElementById('menu-profile-picture').src = profilePicture;
+                    
+                    // Save to localStorage
+                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    userData.profilePicture = profilePicture;
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveAccountSettings() {
+            const firstName = document.getElementById('first-name').value;
+            const lastName = document.getElementById('last-name').value;
+            const language = document.getElementById('language').value;
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmNewPassword = document.getElementById('confirm-new-password').value;
+
+            // Validate password change if attempted
+            if (newPassword) {
+                if (newPassword !== confirmNewPassword) {
+                    alert('New passwords do not match!');
+                    return;
+                }
+                // Here you would typically verify the current password with the backend
+                // For this simulation, we'll just alert if they don't match
+            }
+
+            // Save user data
+            const userData = {
+                firstName,
+                lastName,
+                language,
+                profilePicture: document.getElementById('menu-profile-picture').src
+            };
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            // Update display
+            document.getElementById('user-name').textContent = firstName || 'Account';
+            
+            alert('Settings saved successfully!');
+            toggleAccountMenu();
+        }
+
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                // Here you would typically make an API call to delete the account
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userData');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Modify the search functionality to use YouTube API
+        async function searchYouTube(query) {
+            if (!query) {
+                return;
+            }
+
+            try {
+                // First search for songs/videos
+                const videoResponse = await fetch(`${YOUTUBE_API_URL}?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' music')}&type=video&key=${YOUTUBE_API_KEY}`);
+                const videoData = await videoResponse.json();
+                
+                // Then search for music channels/artists
+                const channelResponse = await fetch(`${YOUTUBE_API_URL}?part=snippet&maxResults=5&q=${encodeURIComponent(query + ' music artist channel')}&type=channel&key=${YOUTUBE_API_KEY}`);
+                const channelData = await channelResponse.json();
+                
+                // Update the results with both songs and artists
+                updateSearchResults(videoData.items, channelData.items);
+            } catch (error) {
+                console.error('YouTube search error:', error);
+            }
+        }
+
+        function updateSearchResults(videoItems, channelItems) {
+            const mainContent = document.querySelector('.main-content');
+            // Preserve the header
+            const currentHeader = mainContent.querySelector('.header').outerHTML;
+
+            mainContent.innerHTML = `
+                ${currentHeader}
+                <div class="section-header">
+                    <h2 class="section-title-main">Search Results</h2>
+                </div>
+                <div class="track-list">
+                    ${videoItems.map((item, index) => `
+                        <div class="track-item" onclick="playVideo('${item.id.videoId}', '${escapeHtml(item.snippet.title)}', '${escapeHtml(item.snippet.channelTitle)}')">
+                            <div class="track-number">${index + 1}</div>
+                            <div class="track-info">
+                                <div class="track-thumbnail">
+                                    <img src="${item.snippet.thumbnails.default.url}" alt="${escapeHtml(item.snippet.title)}" style="display: block;">
+                                </div>
+                                <div class="track-title-artist">
+                                    <div class="track-title">${escapeHtml(item.snippet.title)}</div>
+                                    <div class="track-artist">${escapeHtml(item.snippet.channelTitle)}</div>
+                                </div>
+                            </div>
+                            <div class="track-duration">${item.snippet.title || '0:00'}</div>
+                            <div class="track-action">
+                                <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${channelItems.length > 0 ? `
+                    <div class="section-header" style="margin-top: 40px;">
+                        <h2 class="section-title-main">Artists</h2>
+                    </div>
+                    <div style="display: flex; gap: 20px; overflow-x: auto; padding: 20px 0;">
+                        ${channelItems.map(channel => `
+                            <div class="artist-card" style="min-width: 200px; text-align: center; cursor: pointer;" 
+                                 onclick="window.open('https://www.youtube.com/channel/${channel.id.channelId}', '_blank')">
+                                <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                                    <img src="${channel.snippet.thumbnails.medium.url}" 
+                                         alt="${escapeHtml(channel.snippet.title)}" 
+                                         style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                </div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">${escapeHtml(channel.snippet.title)}</div>
+                                <div style="color: rgba(255,255,255,0.6); font-size: 14px;">Artist</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+            `;
+            // Re-attach search functionality after updating innerHTML
+            const currentSearchInput = mainContent.querySelector('.search-bar input');
+            if (currentSearchInput) {
+                currentSearchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    if (e.target.value.trim()) {
+                        isSearchActive = true;
+                        searchTimeout = setTimeout(() => {
+                            searchYouTube(e.target.value);
+                        }, 500);
+                    } else {
+                        isSearchActive = false;
+                        // When search input is cleared, return to the currently active navigation section
+                        const currentActiveNavItem = document.querySelector('.nav-item.active');
+                        const currentSectionName = currentActiveNavItem ? currentActiveNavItem.textContent.trim() : 'Discover';
+                        handleNavigation(currentSectionName);
+                    }
+                });
+            }
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function handleNavigation(section) {
+            // Update active state for sidebar and mobile nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Find and activate the clicked nav items
+            const sidebarItem = Array.from(document.querySelectorAll('.nav-item'))
+                .find(item => item.textContent.trim() === section);
+            const mobileItem = Array.from(document.querySelectorAll('.mobile-nav-item'))
+                .find(item => item.textContent.trim() === section);
+
+            if (sidebarItem) sidebarItem.classList.add('active');
+            if (mobileItem) mobileItem.classList.add('active');
+
+            // Handle content updates based on section
+            const mainContent = document.querySelector('.main-content');
+            
+            let newContent = '';
+            
+            switch(section) {
+                case 'Discover':
+                    newContent = `
+                        <div class="section-header">
+                            <h2 class="section-title-main">New Releases</h2>
+                        </div>
+                        <div class="album-grid">
+                            ${generateAlbumGrid()}
+                        </div>
+                        <div class="popular-tracks">
+                            <div class="section-header">
+                                <h2 class="section-title-main">Popular Tracks</h2>
+                            </div>
+                            <div class="track-list"></div>
+                        </div>
+                        <div class="popular-artists" style="margin-top: 40px; margin-bottom: 40px;">
+                            <div class="section-header">
+                                <h2 class="section-title-main">Popular Artists</h2>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px 0;">
+                                <div class="artist-card" style="text-align: center; cursor: pointer;" 
+                                     onclick="window.open('https://www.youtube.com/c/EdSheeran', '_blank')">
+                                    <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                                        <img src="https://yt3.googleusercontent.com/n5DRh94eycw6xGcOKTn6LKQwztTwaw24fW3qXoCT_qysXM3E20TgwNLJ0J1sUWBib1TwY8-X=s800-c-k-c0x00ffffff-no-rj" 
+                                             alt="Ed Sheeran" 
+                                             style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                    </div>
+                                    <div style="font-weight: 600; margin-bottom: 5px;">Ed Sheeran</div>
+                                    <div style="color: rgba(255,255,255,0.6); font-size: 14px;">16.2M followers</div>
+                                </div>
+                                <div class="artist-card" style="text-align: center; cursor: pointer;" 
+                                     onclick="window.open('https://www.youtube.com/channel/UCZFWPqqPkFlNwIxcpsLOwew', '_blank')">
+                                    <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                                        <img src="https://yt3.googleusercontent.com/y_esGAQOhX4rTpWvrALErAJlFbm_2TIVjQWaiXq_KMl6bQkJqBZdqHQZWPkGOBjT-0LcOgTWvA=s800-c-k-c0x00ffffff-no-rj" 
+                                             alt="Billie Eilish" 
+                                             style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                    </div>
+                                    <div style="font-weight: 600; margin-bottom: 5px;">Billie Eilish</div>
+                                    <div style="color: rgba(255,255,255,0.6); font-size: 14px;">12.8M followers</div>
+                                </div>
+                                <div class="artist-card" style="text-align: center; cursor: pointer;" 
+                                     onclick="window.open('https://www.youtube.com/c/TheWeeknd', '_blank')">
+                                    <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                                        <img src="https://yt3.googleusercontent.com/QiI-c4cFyRPD6TV8KNMsXQYzqQPQjk8ZlL6gkfsqPVd0DVxNmL5_WYBTZZrqT3JEvJ_bhM5Q=s800-c-k-c0x00ffffff-no-rj" 
+                                             alt="The Weeknd" 
+                                             style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                    </div>
+                                    <div style="font-weight: 600; margin-bottom: 5px;">The Weeknd</div>
+                                    <div style="color: rgba(255,255,255,0.6); font-size: 14px;">14.5M followers</div>
+                                </div>
+                                <div class="artist-card" style="text-align: center; cursor: pointer;" 
+                                     onclick="window.open('https://www.youtube.com/c/DuaLipa', '_blank')">
+                                    <div style="width: 120px; height: 120px; border-radius: 60px; overflow: hidden; margin: 0 auto 15px;">
+                                        <img src="https://yt3.googleusercontent.com/ytc/AIf8zZTUVa5AyXO8-SFO1PxMmrXkgQmQoJGZrGE8Ee9C=s800-c-k-c0x00ffffff-no-rj" 
+                                             alt="Dua Lipa" 
+                                             style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                    </div>
+                                    <div style="font-weight: 600; margin-bottom: 5px;">Dua Lipa</div>
+                                    <div style="color: rgba(255,255,255,0.6); font-size: 14px;">11.7M followers</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'History':
+                    // History content generated inside updateHistoryUI which will be called below
+                    break;
+                case 'Genres':
+                    newContent = `
+                        <div class="section-header">
+                            <h2 class="section-title-main">Music Genres</h2>
+                        </div>
+                        <div class="album-grid">
+                            <!-- Add your genres content here -->
+                        </div>
+                    `;
+                    break;
+                case 'Saved Songs':
+                    const savedSongs = getSavedSongs();
+                    newContent = `
+                        <div class="section-header">
+                            <h2 class="section-title-main">Saved Songs</h2>
+                        </div>
+                        <div class="album-grid">
+                            ${savedSongs.length ? 
+                                savedSongs.map(song => `
+                                    <div class="album-card" 
+                                        onclick="playVideo('${song.videoId}', '${song.title}', '${song.artist}')">
+                                        <div class="album-image">
+                                            <img src="${song.img}" alt="${song.title}">
+                                            <div class="play-button"></div>
+                                        </div>
+                                        <div class="album-info">
+                                            <div class="album-title">${song.title}</div>
+                                            <div class="album-artist">${song.artist}</div>
+                                        </div>
+                                    </div>
+                                `).join('') :
+                                '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.6); grid-column: 1 / -1;">No saved songs yet.</div>'
+                            }
+                        </div>
+                    `;
+                    break;
+                case 'About Me':
+                    newContent = `
+                        <div class="section-header">
+                            <h2 class="section-title-main">About This Project</h2>
+                        </div>
+                        <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 25px;">
+                            This music platform was developed by me.
+                        </p>
+                        <h3 style="font-size: 20px; margin-bottom: 15px; color: #bfadea;">My Social Links:</h3>
+                        <div style="display: flex; gap: 20px; justify-content: flex-start;">
+                            <a href="https://www.roblox.com/users/4819145/profile" target="_blank" class="social-link-item">
+                                <div class="social-icon-circle">
+                                    <img src="https://i.pinimg.com/736x/f8/9d/e3/f89de387a07563ee444f8e9e17f7bb8c.jpg" alt="Roblox" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;">
+                                </div>
+                            </a>
+                            <a href="http://discord.com/users/1395993370245206129" target="_blank" class="social-link-item">
+                                <div class="social-icon-circle">
+                                    <img src="https://tse4.mm.bing.net/th/id/OIP.Qgo8eBVZpDlGx5__GDUO1wHaHa?pid=Api&H=160&W=160" alt="Discord" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;">
+                                </div>
+                            </a>
+                            <a href="https://github.com/lunerxcurse" target="_blank" class="social-link-item">
+                                <div class="social-icon-circle">
+                                    <img src="https://i.pinimg.com/originals/48/e0/73/48e07378e01dd719c060c1f2f2b5cb00.png" alt="GitHub" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;">
+                                </div>
+                            </a>
+                        </div>
+                        <p style="color: rgba(255,255,255,0.8); line-height: 1.6; margin-top: 25px;">
+                            Visit <a href="https://profilepage-com.pages.dev/" target="_blank" style="color: #00ff88; text-decoration: none; font-weight: 600;">profilepage-com.pages.dev</a> to see my other projects
+                        </p>
+                    `;
+                    break;
+            }
+
+            // Keep the header structure and update content
+            mainContent.innerHTML = `
+                <div class="header">
+                    <div class="search-bar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px; opacity: 0.7;">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <div class="auth-buttons">
+                        <div id="logged-out-buttons">
+                            <a href="register.html" class="btn btn-register">Register</a>
+                            <a href="login.html" class="btn btn-login">Login</a>
+                        </div>
+                        <div id="logged-in-buttons" style="display: none;">
+                            <button class="btn btn-account" onclick="toggleAccountMenu()">
+                                <img id="profile-picture" src="/user-default.png" alt="Profile" style="width: 24px; height: 24px; border-radius: 50%; margin-right: 8px;">
+                                <span id="user-name">Account</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                ${newContent}
+            `;
+
+            // Re-initialize any necessary elements and event listeners
+            if (section === 'Discover') {
+                generatePopularTracks();
+            } else if (section === 'History') {
+                updateHistoryUI(); // Call updateHistoryUI here to populate the content after header re-render
+            }
+            
+            // Re-check login status to ensure proper button display
+            checkLoginStatus();
+            
+            // Re-attach search functionality to the NEW search input element
+            const currentSearchInput = mainContent.querySelector('.search-bar input');
+            if (currentSearchInput) {
+                currentSearchInput.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    if (e.target.value.trim()) {
+                        isSearchActive = true;
+                        searchTimeout = setTimeout(() => {
+                            searchYouTube(e.target.value);
+                        }, 500);
+                    } else {
+                        isSearchActive = false;
+                        // Return to current page content
+                        const currentActiveNavItem = document.querySelector('.nav-item.active');
+                        const currentSectionName = currentActiveNavItem ? currentActiveNavItem.textContent.trim() : 'Discover';
+                        handleNavigation(currentSectionName); // Re-render the current section
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Generate album grid initially
+            const albumGrid = document.querySelector('.album-grid');
+            if (albumGrid) {
+                albumGrid.innerHTML = generateAlbumGrid();
+            }
+
+            generatePopularTracks();
+            // Add click handlers to all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Use data-section attribute if available, otherwise fallback to textContent
+                    const section = item.dataset.section || item.textContent.trim();
+                    handleNavigation(section);
+                });
+            });
+
+            // Add click handlers to all mobile nav items
+            document.querySelectorAll('.mobile-nav-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Use data-section attribute if available, otherwise fallback to textContent
+                    const section = item.dataset.section || item.textContent.trim();
+                    handleNavigation(section);
+                });
+            });
+
+            // Modified search input handler for initial load
+            const initialSearchInput = document.querySelector('.search-bar input'); // Local const for initial setup
+            if (initialSearchInput) {
+                initialSearchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        clearTimeout(searchTimeout);
+                        if (e.target.value.trim()) {
+                            isSearchActive = true;
+                            searchTimeout = setTimeout(() => {
+                                searchYouTube(e.target.value);
+                            }, 500);
+                        } else {
+                            isSearchActive = false;
+                            // Return to current page content
+                            const currentActiveNavItem = document.querySelector('.nav-item.active');
+                            const currentSectionName = currentActiveNavItem ? currentActiveNavItem.textContent.trim() : 'Discover';
+                            handleNavigation(currentSectionName); // Re-render the current section
+                        }
+                    }
+                });
+            }
+
+            // Add music player controls
+            const playPauseBtn = document.querySelector('.play-pause');
+            playPauseBtn.addEventListener('click', togglePlayPause);
+
+            const closeEmbedBtn = document.querySelector('.close-embed-btn');
+            closeEmbedBtn.addEventListener('click', () => {
+                document.querySelector('.youtube-embed-container').style.display = 'none';
+                stopVideo();
+            });
+            
+            // Initial check for login status
+            checkLoginStatus();
+            
+            // Initial update of playlists
+            updatePlaylistsUI();
+        });
+
+        function toggleMobilePlayPause() {
+            const playPauseBtn = document.getElementById('mobile-play-pause-btn');
+            const iframe = document.getElementById('mobile-youtube-player');
+            
+            if (!iframe.src) return;
+            
+            if (isVideoPlaying) {
+                iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                isVideoPlaying = false;
+                playPauseBtn.classList.remove('is-playing');
+            } else {
+                iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                isVideoPlaying = true;
+                playPauseBtn.classList.add('is-playing');
+            }
+        }
+
+        function toggleMobileLike() {
+            const likeBtn = document.getElementById('mobile-like-btn');
+            const dislikeBtn = document.getElementById('mobile-dislike-btn');
+            
+            mobileIsLiked = !mobileIsLiked;
+            if (mobileIsLiked) {
+                likeBtn.classList.add('active');
+                mobileIsDisliked = false;
+                dislikeBtn.classList.remove('active');
+            } else {
+                likeBtn.classList.remove('active');
+            }
+        }
+
+        function toggleMobileDislike() {
+            const likeBtn = document.getElementById('mobile-like-btn');
+            const dislikeBtn = document.getElementById('mobile-dislike-btn');
+            
+            mobileIsDisliked = !mobileIsDisliked;
+            if (mobileIsDisliked) {
+                dislikeBtn.classList.add('active');
+                mobileIsLiked = false;
+                likeBtn.classList.remove('active');
+            } else {
+                dislikeBtn.classList.remove('active');
+            }
+        }
+
+        function toggleMobileLoop() {
+            const loopBtn = document.getElementById('mobile-loop-btn');
+            mobileIsLooped = !mobileIsLooped;
+            loopBtn.classList.toggle('active', mobileIsLooped);
+        }
+
+        function previousMobileSong() {
+            // Get current history
+            const history = getSongHistory();
+            if (history.length < 2) return;
+            
+            // Find current song in history
+            const currentIndex = history.findIndex(song => song.videoId === currentMobileVideoId);
+            const nextIndex = currentIndex < history.length - 1 ? currentIndex + 1 : 0;
+            const previousSong = history[nextIndex];
+            
+            if (previousSong) {
+                // Play previous song
+                const mobileYoutubePlayer = document.getElementById('mobile-youtube-player');
+                mobileYoutubePlayer.src = `https://www.youtube.com/embed/${previousSong.videoId}?enablejsapi=1&autoplay=1&controls=0`;
+                
+                currentMobileVideoId = previousSong.videoId;
+                document.getElementById('mobile-song-title').textContent = previousSong.title;
+                document.getElementById('mobile-song-artist').textContent = previousSong.artist;
+                
+                isVideoPlaying = true;
+                document.getElementById('mobile-play-pause-btn').classList.add('is-playing');
+            }
+        }
+
+        function nextMobileSong() {
+            // Get current history
+            const history = getSongHistory();
+            if (history.length < 2) return;
+            
+            // Find current song in history
+            const currentIndex = history.findIndex(song => song.videoId === currentMobileVideoId);
+            const nextIndex = currentIndex > 0 ? currentIndex - 1 : history.length - 1;
+            const nextSong = history[nextIndex];
+            
+            if (nextSong) {
+                // Play next song
+                const mobileYoutubePlayer = document.getElementById('mobile-youtube-player');
+                mobileYoutubePlayer.src = `https://www.youtube.com/embed/${nextSong.videoId}?enablejsapi=1&autoplay=1&controls=0`;
+                
+                currentMobileVideoId = nextSong.videoId;
+                document.getElementById('mobile-song-title').textContent = nextSong.title;
+                document.getElementById('mobile-song-artist').textContent = nextSong.artist;
+                
+                isVideoPlaying = true;
+                document.getElementById('mobile-play-pause-btn').classList.add('is-playing');
+            }
+        }
+
+        function toggleMobileShuffle() {
+            // Get a random song from history
+            const history = getSongHistory();
+            if (history.length < 2) return;
+            
+            // Filter out current song and pick random
+            const otherSongs = history.filter(song => song.videoId !== currentMobileVideoId);
+            if (otherSongs.length === 0) return;
+            
+            const randomSong = otherSongs[Math.floor(Math.random() * otherSongs.length)];
+            
+            // Play random song
+            const mobileYoutubePlayer = document.getElementById('mobile-youtube-player');
+            mobileYoutubePlayer.src = `https://www.youtube.com/embed/${randomSong.videoId}?enablejsapi=1&autoplay=1&controls=0`;
+            
+            currentMobileVideoId = randomSong.videoId;
+            document.getElementById('mobile-song-title').textContent = randomSong.title;
+            document.getElementById('mobile-song-artist').textContent = randomSong.artist;
+            
+            isVideoPlaying = true;
+            document.getElementById('mobile-play-pause-btn').classList.add('is-playing');
+        }
+
+        function seekMobilePlayer(event) {
+            if (!currentMobileVideoId || !mobileDuration) return;
+            
+            const rect = event.currentTarget.getBoundingClientRect();
+            const clickPosition = (event.clientX - rect.left) / rect.width;
+            const newTime = clickPosition * mobileDuration;
+            
+            const iframe = document.getElementById('mobile-youtube-player');
+            iframe.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${newTime},true]}`, '*');
+        }
+
+        function getSavedSongs() {
+            const saved = localStorage.getItem('savedSongs');
+            return saved ? JSON.parse(saved) : [];
+        }
+
+        function addToPlaylist() {
+            if (!currentMobileVideoId) return;
+            
+            const playlists = JSON.parse(localStorage.getItem('playlists') || '[]');
+            
+            if (playlists.length === 0) {
+                showMobileNotification('No playlists available. Create one first!');
+                return;
+            }
+
+            // Create a simple selection modal
+            const playlistNames = playlists.map(p => p.name);
+            let playlistOptions = playlistNames.map((name, index) => `${index + 1}. ${name}`).join('\n');
+            const selection = prompt(`Select a playlist (enter number):\n${playlistOptions}`);
+            
+            if (selection && !isNaN(selection)) {
+                const playlistIndex = parseInt(selection) - 1;
+                if (playlistIndex >= 0 && playlistIndex < playlists.length) {
+                    const playlist = playlists[playlistIndex];
+                    const currentSong = {
+                        videoId: currentMobileVideoId,
+                        title: document.getElementById('mobile-song-title').textContent,
+                        artist: document.getElementById('mobile-song-artist').textContent,
+                        img: `https://i.ytimg.com/vi/${currentMobileVideoId}/mqdefault.jpg`
+                    };
+                    
+                    // Check if song already exists in playlist
+                    const exists = playlist.songs.some(song => song.videoId === currentSong.videoId);
+                    if (!exists) {
+                        playlist.songs.push(currentSong);
+                        localStorage.setItem('playlists', JSON.stringify(playlists));
+                        alert(`Added to ${playlist.name}!`);
+                    } else {
+                        alert('Song is already in this playlist!');
+                    }
+                }
+            }
+        }
+
+        function shareMobileSong() {
+            if (!currentMobileVideoId) return;
+            
+            const url = `https://youtu.be/${currentMobileVideoId}`;
+            const title = document.getElementById('mobile-song-title').textContent;
+            const artist = document.getElementById('mobile-song-artist').textContent;
+            const shareText = `Check out "${title}" by ${artist}!`;
+
+            // Show custom share modal
+            document.getElementById('share-link-input').value = url;
+            document.getElementById('share-text-area').value = shareText;
+            document.getElementById('share-modal').classList.add('active');
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal').classList.remove('active');
+        }
+
+        function copyShareLink() {
+            const linkInput = document.getElementById('share-link-input');
+            const textArea = document.getElementById('share-text-area');
+            const copyText = `${textArea.value}\n${linkInput.value}`;
+            
+            navigator.clipboard.writeText(copyText).then(() => {
+                const copyBtn = document.querySelector('.copy-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = 'linear-gradient(45deg, #00ff88, #00ff88)';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.style.background = 'linear-gradient(45deg, #00ff88, #00ccff)';
+                }, 2000);
+            }).catch(() => {
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        function setMobileVolume(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const clickPosition = (event.clientX - rect.left) / rect.width;
+            const volume = Math.max(0, Math.min(100, clickPosition * 100));
+            
+            document.getElementById('mobile-volume-progress').style.width = `${volume}%`;
+            
+            const iframe = document.getElementById('mobile-youtube-player');
+            iframe.contentWindow.postMessage(`{"event":"command","func":"setVolume","args":[${volume}]}`, '*');
+        }
+
+        function generateAlbumGrid() {
+            const albums = [
+                { img: '/album1.png', title: 'Demonios de Blanco', artist: 'Versión Prohibida', videoId: 'dQw4w9WgXcQ' },
+                { img: '/album2.png', title: 'Debí TIRAR MÁS FOTOS - DISCO TRoPICAL MIX', artist: 'Cielo Roto', videoId: '8PM5tJoWuYw' },
+                { img: '/album3.png', title: 'BAILE iNoLVIDABLE', artist: 'Cielo Roto', videoId: '5qap5aO4i9A' },
+                { img: '/album4.png', title: 'The Ride: Stories from 503', artist: 'Riffboys', videoId: 'jfKfPfyJRdk' },
+                { img: '/album5.png', title: 'We Vibe', artist: 'Dray Flowers', videoId: '36YnV9STBqc' },
+                { img: '/album6.png', title: 'Fish & Tits', artist: 'The Good Dog', videoId: '21qNxnCS8WU' },
+                { img: '/album7.png', title: 'The Thief of Time', artist: 'The Good Dog', videoId: 'rVeMiVU77wo' },
+                { img: '/album8.png', title: 'Liquid Flow', artist: 'Lara Chrome', videoId: 'wJGcwEv7838' },
+                { img: '/album9.png', title: 'Midnight Dreams', artist: 'Luna Wave', videoId: 'n61ULEU7CO0' },
+                { img: '/album10.png', title: 'Electric Soul', artist: 'Neon Pulse', videoId: 'VVkGYkn4yZo' },
+                { img: '/album11.png', title: 'Ocean Breeze', artist: 'Coastal Rhythms', videoId: 'QGJuMBdaqIw' },
+                { img: '/album12.png', title: 'Urban Nights', artist: 'City Lights', videoId: 'HV7DtH3J0Ws' }
+            ];
+
+            return albums.map(album => `
+                <div class="album-card" 
+                    onclick="playVideo('${album.videoId}', '${album.title}', '${album.artist}')">
+                    <div class="album-image">
+                        <img src="${album.img}" alt="${album.title}">
+                        <div class="play-button"></div>
+                    </div>
+                    <div class="album-info">
+                        <div class="album-title">${album.title}</div>
+                        <div class="album-artist">${album.artist}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generatePopularTracks() {
+            const tracks = [
+                { number: 1, title: "Havana", artist: "Camila Cabello", duration: "3:37", videoId: "HCjNJDNzw8Y", img: "/album1.png" },
+                { number: 2, title: "Blinding Lights", artist: "The Weeknd", duration: "3:20", videoId: "4NRXx6U8ABQ", img: "/album2.png" },
+                { number: 3, title: "Stay With Me", artist: "Sam Smith", duration: "2:52", videoId: "pB-5XG-DbAA", img: "/album3.png" },
+                { number: 4, title: "Shape of You", artist: "Ed Sheeran", duration: "3:53", videoId: "JGwWNGJdvx8", img: "/album4.png" },
+                { number: 5, title: "Bad Guy", artist: "Billie Eilish", duration: "3:14", videoId: "DyDfgMOUjCI", img: "/album5.png" },
+                { number: 6, title: "Uptown Funk", artist: "Mark Ronson ft. Bruno Mars", duration: "4:30", videoId: "OPf0YbXqDm0", img: "/album6.png" },
+                { number: 7, title: "Believer", artist: "Imagine Dragons", duration: "3:24", videoId: "7wtfhZwyrcc", img: "/album7.png" },
+                { number: 8, title: "Dance Monkey", artist: "Tones and I", duration: "3:29", videoId: "q0hyYWKXF0Q", img: "/album8.png" },
+                { number: 9, title: "Someone You Loved", artist: "Lewis Capaldi", duration: "3:02", videoId: "bCuhuePlP8o", img: "/album9.png" },
+                { number: 10, title: "Don't Start Now", artist: "Dua Lipa", duration: "3:03", videoId: "oygrmJFKYZY", img: "/album10.png" }
+            ];
+
+            const trackList = document.querySelector('.track-list');
+            if (trackList) {
+                trackList.innerHTML = tracks.map(track => `
+                    <div class="track-item" onclick="playVideo('${track.videoId}', '${track.title}', '${track.artist}')" >
+                        <div class="track-number">${track.number}</div>
+                        <div class="track-info">
+                            <div class="track-thumbnail">
+                                <img src="${track.img}" alt="${track.title}" style="display: block;">
+                            </div>
+                            <div class="track-title-artist">
+                                <div class="track-title">${track.title}</div>
+                                <div class="track-artist">${track.artist}</div>
+                            </div>
+                        </div>
+                        <div class="track-duration">${track.duration || '0:00'}</div>
+                        <div class="track-action">
+                            <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Add click handler for mobile player left section
+        document.addEventListener('DOMContentLoaded', () => {
+            // ... existing code ...
+
+            // Add mobile fullscreen trigger for player-left on mobile
+            const playerLeft = document.querySelector('.player-left');
+            if (playerLeft) {
+                playerLeft.addEventListener('click', () => {
+                    if (window.innerWidth <= 768 && currentPlayer && songTitle.textContent !== 'No Music Selected') {
+                        // Get current song info and open mobile player
+                        const videoId = currentMobileVideoId || 'dQw4w9WgXcQ'; // fallback
+                        const title = songTitle.textContent;
+                        const artist = songArtist.textContent;
+                        openMobileFullscreenPlayer(videoId, title, artist);
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Create playlist modal -->
+    <div id="createPlaylistModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Playlist</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="createPlaylistForm" onsubmit="handleCreatePlaylist(event)">
+                <div class="form-group">
+                    <label for="playlistName">Playlist Name</label>
+                    <input type="text" id="playlistName" required>
+                </div>
+                <div class="form-group">
+                    <label for="playlistDescription">Description</label>
+                    <textarea id="playlistDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="playlistImage">Cover Image</label>
+                    <div class="image-upload">
+                        <input type="file" id="playlistImage" accept="image/*" onchange="previewImage(event)">
+                        <div class="image-preview">
+                            <img id="imagePreview" src="#" alt="Preview">
+                            <div class="upload-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-4 4H5a2 2 0 0 1-4-4v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                <span>Choose an image</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-create">Create Playlist</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Modal functions
+        function showCreatePlaylistModal() {
+            document.getElementById('createPlaylistModal').style.display = 'flex';
+        }
+
+        document.querySelector('#createPlaylistModal .close-modal').addEventListener('click', () => {
+            document.getElementById('createPlaylistModal').style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target == document.getElementById('createPlaylistModal')) {
+                document.getElementById('createPlaylistModal').style.display = 'none';
+            }
+        });
+
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+                document.querySelector('.upload-placeholder').style.display = 'none';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function handleCreatePlaylist(event) {
+            event.preventDefault();
+            
+            const playlistName = document.getElementById('playlistName').value;
+            const playlistDescription = document.getElementById('playlistDescription').value;
+            const playlistImage = document.getElementById('imagePreview').src; // Get the base64 URL from preview
+
+            if (playlistName.trim() === '') {
+                alert('Playlist name cannot be empty!');
+                return;
+            }
+
+            let playlists = JSON.parse(localStorage.getItem('playlists') || '[]');
+            const newPlaylist = {
+                id: Date.now(), // Simple unique ID
+                name: playlistName,
+                description: playlistDescription,
+                image: playlistImage === '#' ? '/album-default.png' : playlistImage, // Use a default if no image selected
+                songs: [] // Start with an empty array of songs
+            };
+            playlists.push(newPlaylist);
+            localStorage.setItem('playlists', JSON.stringify(playlists));
+            
+            updatePlaylistsUI();
+            document.getElementById('createPlaylistModal').style.display = 'none';
+            document.getElementById('createPlaylistForm').reset();
+            document.getElementById('imagePreview').src = '#';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.querySelector('.upload-placeholder').style.display = 'flex';
+            alert('Playlist created successfully!');
+        }
+    </script>
+    <div id="mobile-notification" style="display:none; color:#fff; background:rgba(255,0,0,0.7); padding:10px; border-radius:8px; position:absolute; top:20px; left:20px; right:20px; z-index:3001; text-align:center;">
+        <span id="mobile-notification-text"></span>
+        <button onclick="closeMobileNotification()" style="margin-left:10px; background:none; border:none; color:#fff; font-size:16px; cursor:pointer;">×</button>
+    </div>
+    <script>
+        function addToPlaylist() {
+            if (!currentMobileVideoId) return;
+
+            const playlists = JSON.parse(localStorage.getItem('playlists') || '[]');
+
+            if (playlists.length === 0) {
+                const notif = document.getElementById('mobile-notification');
+                const notifText = document.getElementById('mobile-notification-text');
+                notifText.textContent = 'No playlists available. Create one first!';
+                notif.style.display = 'block';
+                setTimeout(closeMobileNotification, 3000);
+                return;
+            }
+
+            // ...rest of existing addToPlaylist logic...
+        }
+
+        function closeMobileNotification() {
+            document.getElementById('mobile-notification').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
